@@ -8421,12 +8421,13 @@ var _user$project$Swagger_Decode$lazy = function (thunk) {
 				js);
 		});
 };
+var _user$project$Swagger_Decode$decodeAdditionalPropertiesType = A2(_elm_lang$core$Json_Decode$field, 'type', _elm_lang$core$Json_Decode$string);
 var _user$project$Swagger_Decode$Swagger = function (a) {
 	return {definitions: a};
 };
-var _user$project$Swagger_Decode$Definition = F7(
-	function (a, b, c, d, e, f, g) {
-		return {type_: a, required: b, properties: c, items: d, ref_: e, $enum: f, $default: g};
+var _user$project$Swagger_Decode$Definition = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {type_: a, required: b, properties: c, additionalPropertiesType: d, items: e, ref_: f, $enum: g, $default: h};
 	});
 var _user$project$Swagger_Decode$Property = function (a) {
 	return {ctor: 'Property', _0: a};
@@ -8458,18 +8459,22 @@ var _user$project$Swagger_Decode$decodeDefinition = _user$project$Swagger_Decode
 						A2(_elm_lang$core$Json_Decode$map, _user$project$Swagger_Decode$Property, _user$project$Swagger_Decode$decodeDefinition),
 						A3(
 							_user$project$Swagger_Decode$maybe,
-							'properties',
-							_user$project$Swagger_Decode$decodeProperties,
-							A4(
-								_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
-								'required',
-								_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$string),
-								{ctor: '[]'},
-								A3(
-									_user$project$Swagger_Decode$maybe,
-									'type',
-									_elm_lang$core$Json_Decode$string,
-									_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Swagger_Decode$Definition))))))));
+							'additionalProperties',
+							_user$project$Swagger_Decode$decodeAdditionalPropertiesType,
+							A3(
+								_user$project$Swagger_Decode$maybe,
+								'properties',
+								_user$project$Swagger_Decode$decodeProperties,
+								A4(
+									_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
+									'required',
+									_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$string),
+									{ctor: '[]'},
+									A3(
+										_user$project$Swagger_Decode$maybe,
+										'type',
+										_elm_lang$core$Json_Decode$string,
+										_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Swagger_Decode$Definition)))))))));
 	});
 var _user$project$Swagger_Decode$decodeProperties = _elm_lang$core$Json_Decode$dict(_user$project$Swagger_Decode$decodeProperty);
 var _user$project$Swagger_Decode$decodeDefinitions = _elm_lang$core$Json_Decode$dict(_user$project$Swagger_Decode$decodeDefinition);
@@ -8501,19 +8506,20 @@ var _user$project$Swagger_Flatten$extractProperty = function (_p2) {
 };
 var _user$project$Swagger_Flatten$makeRef = F2(
 	function (parentName, name) {
-		return A7(
-			_user$project$Swagger_Decode$Definition,
-			_elm_lang$core$Maybe$Nothing,
-			{ctor: '[]'},
-			_elm_lang$core$Maybe$Nothing,
-			_elm_lang$core$Maybe$Nothing,
-			_elm_lang$core$Maybe$Just(
+		return {
+			type_: _elm_lang$core$Maybe$Nothing,
+			required: {ctor: '[]'},
+			properties: _elm_lang$core$Maybe$Nothing,
+			additionalPropertiesType: _elm_lang$core$Maybe$Nothing,
+			items: _elm_lang$core$Maybe$Nothing,
+			ref_: _elm_lang$core$Maybe$Just(
 				A2(
 					_elm_lang$core$Basics_ops['++'],
 					'#/definitions/',
 					A2(_user$project$Swagger_Flatten$nestedTypeName, parentName, name))),
-			_elm_lang$core$Maybe$Nothing,
-			_elm_lang$core$Maybe$Nothing);
+			$enum: _elm_lang$core$Maybe$Nothing,
+			$default: _elm_lang$core$Maybe$Nothing
+		};
 	});
 var _user$project$Swagger_Flatten$flattenProperties = F2(
 	function (parentName, properties) {
@@ -8539,10 +8545,11 @@ var _user$project$Swagger_Flatten$flattenProperties = F2(
 									ctor: '_Tuple2',
 									_0: _p9,
 									_1: _user$project$Swagger_Decode$Property(
-										A7(
+										A8(
 											_user$project$Swagger_Decode$Definition,
 											_elm_lang$core$Maybe$Just('array'),
 											{ctor: '[]'},
+											_elm_lang$core$Maybe$Nothing,
 											_elm_lang$core$Maybe$Nothing,
 											_elm_lang$core$Maybe$Just(
 												_user$project$Swagger_Decode$Property(
@@ -8656,8 +8663,8 @@ var _user$project$Swagger_Parse$extractRefType = function (ref) {
 			_elm_lang$core$Native_Utils.crash(
 				'Swagger.Parse',
 				{
-					start: {line: 133, column: 17},
-					end: {line: 133, column: 28}
+					start: {line: 147, column: 17},
+					end: {line: 147, column: 28}
 				})('Unparseable reference '),
 			ref);
 	}
@@ -8670,10 +8677,11 @@ var _user$project$Swagger_Parse$toNewItems = F2(
 				{
 					ctor: '_Tuple2',
 					_0: 'TODO WTF',
-					_1: A7(
+					_1: A8(
 						_user$project$Swagger_Decode$Definition,
 						_elm_lang$core$Maybe$Nothing,
 						{ctor: '[]'},
+						_elm_lang$core$Maybe$Nothing,
 						_elm_lang$core$Maybe$Nothing,
 						_elm_lang$core$Maybe$Nothing,
 						_elm_lang$core$Maybe$Nothing,
@@ -8716,6 +8724,9 @@ var _user$project$Swagger_Parse$String_ = function (a) {
 };
 var _user$project$Swagger_Parse$Ref_ = function (a) {
 	return {ctor: 'Ref_', _0: a};
+};
+var _user$project$Swagger_Parse$Dict_ = function (a) {
+	return {ctor: 'Dict_', _0: a};
 };
 var _user$project$Swagger_Parse$Array_ = function (a) {
 	return {ctor: 'Array_', _0: a};
@@ -8794,15 +8805,7 @@ var _user$project$Swagger_Parse$toNewDefinition = F2(
 											_user$project$Swagger_Parse$toNewDefinition(_p12),
 											_p7._1.items)));
 							case 'object':
-								return A3(
-									_user$project$Swagger_Parse$Definition,
-									_p10,
-									isRequired_,
-									_user$project$Swagger_Parse$Object_(
-										A2(
-											_user$project$Swagger_Parse$toNewProperties,
-											_user$project$Swagger_Parse$toNewDefinition(_p12),
-											_p11)));
+								return A5(_user$project$Swagger_Parse$distinguishObjectMap, _p10, isRequired_, _p12, _p11, _p7._1.additionalPropertiesType);
 							default:
 								return A3(
 									_user$project$Swagger_Parse$Definition,
@@ -8831,6 +8834,57 @@ var _user$project$Swagger_Parse$toNewDefinition = F2(
 					_user$project$Swagger_Parse$toNewProperties,
 					_user$project$Swagger_Parse$toNewDefinition(_p12),
 					_p11)));
+	});
+var _user$project$Swagger_Parse$distinguishObjectMap = F5(
+	function (name, isRequired_, required, properties, additionalPropertiesType) {
+		var _p13 = additionalPropertiesType;
+		if (_p13.ctor === 'Nothing') {
+			return A3(
+				_user$project$Swagger_Parse$Definition,
+				name,
+				isRequired_,
+				_user$project$Swagger_Parse$Object_(
+					A2(
+						_user$project$Swagger_Parse$toNewProperties,
+						_user$project$Swagger_Parse$toNewDefinition(required),
+						properties)));
+		} else {
+			var _p14 = properties;
+			if (_p14.ctor === 'Just') {
+				return A3(
+					_user$project$Swagger_Parse$Definition,
+					name,
+					isRequired_,
+					_user$project$Swagger_Parse$Object_(
+						A2(
+							_user$project$Swagger_Parse$toNewProperties,
+							_user$project$Swagger_Parse$toNewDefinition(required),
+							properties)));
+			} else {
+				return A3(
+					_user$project$Swagger_Parse$Definition,
+					name,
+					isRequired_,
+					_user$project$Swagger_Parse$Dict_(
+						A2(
+							_user$project$Swagger_Parse$toNewDefinition,
+							required,
+							{
+								ctor: '_Tuple2',
+								_0: '',
+								_1: A8(
+									_user$project$Swagger_Decode$Definition,
+									_elm_lang$core$Maybe$Just(_p13._0),
+									{ctor: '[]'},
+									_elm_lang$core$Maybe$Nothing,
+									_elm_lang$core$Maybe$Nothing,
+									_elm_lang$core$Maybe$Nothing,
+									_elm_lang$core$Maybe$Nothing,
+									_elm_lang$core$Maybe$Nothing,
+									_elm_lang$core$Maybe$Nothing)
+							})));
+			}
+		}
 	});
 
 var _user$project$Generate_Type$enumTagName = F2(
@@ -8935,24 +8989,36 @@ var _user$project$Generate_Type$renderFieldType = function (type_) {
 		case 'Array_':
 			return _user$project$Codegen_Type$list(
 				_user$project$Generate_Type$renderFieldType(_p10._0._2));
+		case 'Dict_':
+			var _p12 = _p10._0;
+			return _elm_lang$core$String$concat(
+				{
+					ctor: '::',
+					_0: 'Dict String ',
+					_1: {
+						ctor: '::',
+						_0: _user$project$Generate_Type$renderFieldType(_p12._2),
+						_1: {ctor: '[]'}
+					}
+				});
 		default:
 			return _user$project$Codegen_Utils$capitalize(
 				_user$project$Codegen_Utils$sanitize(_p10._0));
 	}
 };
-var _user$project$Generate_Type$renderProperty = function (_p12) {
-	var _p13 = _p12;
+var _user$project$Generate_Type$renderProperty = function (_p13) {
+	var _p14 = _p13;
 	return A2(
 		_user$project$Codegen_Type$recordField,
-		_user$project$Codegen_Utils$sanitize(_p13._0),
-		A2(_user$project$Generate_Type$renderType, _p13._1, _p13._2));
+		_user$project$Codegen_Utils$sanitize(_p14._0),
+		A2(_user$project$Generate_Type$renderType, _p14._1, _p14._2));
 };
-var _user$project$Generate_Type$renderRootType = function (_p14) {
-	var _p15 = _p14;
+var _user$project$Generate_Type$renderRootType = function (_p15) {
+	var _p16 = _p15;
 	return A2(
 		_user$project$Codegen_Type$typeAlias,
-		_user$project$Codegen_Utils$sanitize(_p15._0),
-		A2(_user$project$Generate_Type$renderType, _p15._1, _p15._2));
+		_user$project$Codegen_Utils$sanitize(_p16._0),
+		A2(_user$project$Generate_Type$renderType, _p16._1, _p16._2));
 };
 var _user$project$Generate_Type$renderTypes = function (definitions) {
 	return _elm_lang$core$String$concat(
@@ -9002,8 +9068,8 @@ var _user$project$Generate_Decoder$defaultValue = F2(
 					_elm_lang$core$Native_Utils.crash(
 						'Generate.Decoder',
 						{
-							start: {line: 110, column: 21},
-							end: {line: 110, column: 32}
+							start: {line: 113, column: 21},
+							end: {line: 113, column: 32}
 						}),
 					'Invalid default value',
 					_p1._0,
@@ -9077,6 +9143,8 @@ var _user$project$Generate_Decoder$renderDecoderBody = F2(
 				return 'bool';
 			case 'Object_':
 				return A2(_user$project$Generate_Decoder$renderObjectDecoder, constructor, _p5._0);
+			case 'Dict_':
+				return _user$project$Generate_Decoder$renderDictDecoder(_p5._0);
 			case 'Array_':
 				return _user$project$Generate_Decoder$renderListDecoder(_p5._0);
 			default:
@@ -9084,14 +9152,24 @@ var _user$project$Generate_Decoder$renderDecoderBody = F2(
 					_user$project$Codegen_Utils$sanitize(_p5._0));
 		}
 	});
-var _user$project$Generate_Decoder$renderListDecoder = function (_p7) {
+var _user$project$Generate_Decoder$renderDictDecoder = function (_p7) {
 	var _p8 = _p7;
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		'(dict (',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			A2(_user$project$Generate_Decoder$renderDecoderBody, _p8._0, _p8._2),
+			'))'));
+};
+var _user$project$Generate_Decoder$renderListDecoder = function (_p9) {
+	var _p10 = _p9;
 	return A2(
 		_elm_lang$core$Basics_ops['++'],
 		'(list (',
 		A2(
 			_elm_lang$core$Basics_ops['++'],
-			A2(_user$project$Generate_Decoder$renderDecoderBody, _p8._0, _p8._2),
+			A2(_user$project$Generate_Decoder$renderDecoderBody, _p10._0, _p10._2),
 			'))'));
 };
 var _user$project$Generate_Decoder$renderObjectDecoder = F2(
@@ -9104,33 +9182,33 @@ var _user$project$Generate_Decoder$renderObjectDecoder = F2(
 				_user$project$Codegen_Utils$capitalize(safeName)),
 			A2(_elm_lang$core$List$map, _user$project$Generate_Decoder$renderObjectDecoderProperty, properties));
 	});
-var _user$project$Generate_Decoder$renderObjectDecoderProperty = function (_p9) {
-	var _p10 = _p9;
-	var _p12 = _p10._2;
-	var _p11 = _p10._0;
+var _user$project$Generate_Decoder$renderObjectDecoderProperty = function (_p11) {
+	var _p12 = _p11;
+	var _p14 = _p12._2;
+	var _p13 = _p12._0;
 	return A3(
 		_user$project$Generate_Decoder$maybeDefaultWrap,
-		_p10._1,
-		_p12,
+		_p12._1,
+		_p14,
 		A2(
 			_elm_lang$core$Basics_ops['++'],
 			' \"',
 			A2(
 				_elm_lang$core$Basics_ops['++'],
-				_p11,
+				_p13,
 				A2(
 					_elm_lang$core$Basics_ops['++'],
 					'\" ',
 					A2(
 						_user$project$Generate_Decoder$renderDecoderBody,
-						_user$project$Codegen_Utils$sanitize(_p11),
-						_p12)))));
+						_user$project$Codegen_Utils$sanitize(_p13),
+						_p14)))));
 };
-var _user$project$Generate_Decoder$renderEnum = function (_p13) {
-	var _p14 = _p13;
-	var _p15 = _p14._2;
-	if ((_p15.ctor === 'String_') && (_p15._0.ctor === 'Enum')) {
-		var safeName = _user$project$Codegen_Utils$sanitize(_p15._0._0);
+var _user$project$Generate_Decoder$renderEnum = function (_p15) {
+	var _p16 = _p15;
+	var _p17 = _p16._2;
+	if ((_p17.ctor === 'String_') && (_p17._0.ctor === 'Enum')) {
+		var safeName = _user$project$Codegen_Utils$sanitize(_p17._0._0);
 		return _elm_lang$core$Maybe$Just(
 			A4(
 				_user$project$Codegen_Function$function,
@@ -9152,7 +9230,7 @@ var _user$project$Generate_Decoder$renderEnum = function (_p13) {
 									A2(
 										_elm_lang$core$List$map,
 										_user$project$Generate_Decoder$renderEnumEach(safeName),
-										_p15._0._1),
+										_p17._0._1),
 									{
 										ctor: '::',
 										_0: _user$project$Generate_Decoder$renderEnumFail(safeName),
@@ -9166,9 +9244,9 @@ var _user$project$Generate_Decoder$renderEnum = function (_p13) {
 		return _elm_lang$core$Maybe$Nothing;
 	}
 };
-var _user$project$Generate_Decoder$renderDecoder = function (_p16) {
-	var _p17 = _p16;
-	var safeName = _user$project$Codegen_Utils$sanitize(_p17._0);
+var _user$project$Generate_Decoder$renderDecoder = function (_p18) {
+	var _p19 = _p18;
+	var safeName = _user$project$Codegen_Utils$sanitize(_p19._0);
 	return A4(
 		_user$project$Codegen_Function$function,
 		_user$project$Generate_Decoder$decoderName(safeName),
@@ -9177,7 +9255,7 @@ var _user$project$Generate_Decoder$renderDecoder = function (_p16) {
 			_elm_lang$core$Basics_ops['++'],
 			'Decoder ',
 			_user$project$Codegen_Utils$capitalize(safeName)),
-		A2(_user$project$Generate_Decoder$renderDecoderBody, safeName, _p17._2));
+		A2(_user$project$Generate_Decoder$renderDecoderBody, safeName, _p19._2));
 };
 var _user$project$Generate_Decoder$renderDecoders = function (definitions) {
 	return _elm_lang$core$String$concat(
@@ -9190,7 +9268,7 @@ var _user$project$Generate_Decoder$renderDecoders = function (definitions) {
 			A2(_elm_lang$core$List$map, _user$project$Generate_Decoder$renderDecoder, definitions)));
 };
 
-var _user$project$Generate_Headers$renderHeaders = 'module Decoder exposing (..)\n\nimport Json.Decode exposing (Decoder, string, int, float, dict, list, bool, map, value, decodeValue, decodeString)\nimport Json.Decode.Pipeline exposing (decode, required, optional, hardcoded)\n\n\nmaybe : String -> Decoder a -> Decoder (Maybe a -> b) -> Decoder b\nmaybe name decoder =\n    optional name (map Just decoder) Nothing\n\n\nlazy : (() -> Decoder a) -> Decoder a\nlazy thunk =\n    customDecoder value\n        (\\js -> decodeValue (thunk ()) js)\n\n\ncustomDecoder : Decoder a -> (a -> Result String b) -> Decoder b\ncustomDecoder decoder toResult =\n    Json.Decode.andThen\n        (\\a ->\n            case toResult a of\n                Ok b ->\n                    Json.Decode.succeed b\n\n                Err err ->\n                    Json.Decode.fail err\n        )\n        decoder\n\n\n';
+var _user$project$Generate_Headers$renderHeaders = 'module Decoder exposing (..)\n\nimport Json.Decode exposing (Decoder, string, int, float, dict, list, bool, map, value, decodeValue, decodeString)\nimport Json.Decode.Pipeline exposing (decode, required, optional, hardcoded)\nimport Dict exposing (Dict)\n\n\nmaybe : String -> Decoder a -> Decoder (Maybe a -> b) -> Decoder b\nmaybe name decoder =\n    optional name (map Just decoder) Nothing\n\n\nlazy : (() -> Decoder a) -> Decoder a\nlazy thunk =\n    customDecoder value\n        (\\js -> decodeValue (thunk ()) js)\n\n\ncustomDecoder : Decoder a -> (a -> Result String b) -> Decoder b\ncustomDecoder decoder toResult =\n    Json.Decode.andThen\n        (\\a ->\n            case toResult a of\n                Ok b ->\n                    Json.Decode.succeed b\n\n                Err err ->\n                    Json.Decode.fail err\n        )\n        decoder\n\n\n';
 
 var _user$project$Generate$render = function (swagger) {
 	var definitions = _user$project$Swagger_Parse$parseDefinitions(swagger.definitions);

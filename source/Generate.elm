@@ -10,6 +10,7 @@ import Swagger.Parse exposing (parseDefinitions)
 import Generate.Type as Type
 import Generate.Decoder as Decoder
 import Generate.Headers as Headers
+import Debug
 
 
 main : Program String String x

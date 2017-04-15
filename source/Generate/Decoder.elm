@@ -11,7 +11,7 @@ import Swagger.Parse as Parse
         , Enum(Enum, NotEnum)
         , IsRequired(IsRequired, NotRequired)
         , Properties
-        , Type(Object_, Array_, Ref_, Int_, Float_, String_, Bool_)
+        , Type(Object_, Dict_, Array_, Ref_, Int_, Float_, String_, Bool_)
         )
 import Codegen.Function as Fun exposing (function, pipeline, letin, caseof)
 import Codegen.Utils exposing (capitalize, sanitize)
@@ -63,6 +63,9 @@ renderDecoderBody constructor type_ =
 
         Object_ properties ->
             renderObjectDecoder constructor properties
+
+        Dict_ definition ->
+            renderDictDecoder definition
 
         Array_ definition ->
             renderListDecoder definition
@@ -116,6 +119,10 @@ defaultValue type_ default =
 renderListDecoder : Definition -> String
 renderListDecoder (Definition name isRequired type_) =
     "(list (" ++ (renderDecoderBody name type_) ++ "))"
+
+renderDictDecoder : Definition -> String
+renderDictDecoder (Definition name isRequired type_) =
+    "(dict (" ++ (renderDecoderBody name type_) ++ "))"
 
 
 renderEnum : Definition -> Maybe String

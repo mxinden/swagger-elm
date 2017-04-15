@@ -138,6 +138,12 @@
     },
     "lowerCaseDefinitionObject": {
       "type": "object"
+    },
+    "labels": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
     }
   }
 }

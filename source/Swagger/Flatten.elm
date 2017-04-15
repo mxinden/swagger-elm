@@ -48,7 +48,7 @@ flattenProperties parentName properties =
                                     ( name, Decode.Property definition )
 
                                 Just items ->
-                                    ( name, Decode.Property <| Decode.Definition (Just "array") [] Nothing (Just <| Decode.Property (makeRef parentName name)) Nothing Nothing Nothing )
+                                    ( name, Decode.Property <| Decode.Definition (Just "array") [] Nothing Nothing (Just <| Decode.Property (makeRef parentName name)) Nothing Nothing Nothing )
 
                         Just props ->
                             ( name, Decode.Property (makeRef parentName name) )
@@ -59,7 +59,15 @@ flattenProperties parentName properties =
 
 makeRef : String -> String -> Decode.Definition
 makeRef parentName name =
-    Decode.Definition Nothing [] Nothing Nothing (Just <| "#/definitions/" ++ (nestedTypeName parentName name)) Nothing Nothing
+    { type_ = Nothing
+    , required = []
+    , properties = Nothing
+    , additionalPropertiesType = Nothing
+    , items = Nothing
+    , ref_ = (Just <| "#/definitions/" ++ (nestedTypeName parentName name))
+    , enum = Nothing
+    , default = Nothing
+    }
 
 
 extractProperty : ( a, Decode.Property ) -> ( a, Decode.Definition )

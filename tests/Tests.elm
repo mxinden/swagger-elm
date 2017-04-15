@@ -5,6 +5,7 @@ import Expect exposing (Expectation, fail)
 import Json.Decode exposing (decodeString)
 import Integration.Decoder
 import Unit.Codegen.Utils
+import Unit.Swagger.Decode
 
 
 all : Test
@@ -12,4 +13,5 @@ all =
     describe "Tests"
         [ Integration.Decoder.all
         , Unit.Codegen.Utils.all
+        , Unit.Swagger.Decode.all
         ]

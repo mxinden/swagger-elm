@@ -8,7 +8,7 @@ import Swagger.Parse as Parse
         , Definition(Definition)
         , Enum(Enum, NotEnum)
         , IsRequired(IsRequired, NotRequired)
-        , Type(Object_, Array_, Ref_, Int_, Float_, String_, Bool_)
+        , Type(Object_, Array_, Dict_, Ref_, Int_, Float_, String_, Bool_)
         )
 import Codegen.Type exposing (typeAlias, unionType, record, recordField, list, maybe)
 import Codegen.Utils exposing (capitalize, sanitize)
@@ -56,6 +56,11 @@ renderFieldType type_ =
 
         Array_ (Definition name isRequired type_) ->
             list <| renderFieldType type_
+
+        Dict_ fieldType ->
+            case fieldType of
+                Definition name isRequired type_ ->
+                    String.concat ["Dict String ", renderFieldType type_]
 
         Ref_ ref ->
             (capitalize <| sanitize ref)

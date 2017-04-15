@@ -18,6 +18,7 @@ type Definition
 type Type
     = Object_ Properties
     | Array_ Definition
+    | Dict_ Definition
     | Ref_ Name
     | String_ Enum
     | Int_
@@ -53,7 +54,7 @@ parseDefinitions definitions =
 
 
 toNewDefinition : List String -> ( String, Decode.Definition ) -> Definition
-toNewDefinition parentRequired ( name, { type_, ref_, items, properties, required, enum, default } ) =
+toNewDefinition parentRequired ( name, { type_, ref_, items, properties, additionalPropertiesType, required, enum, default } ) =
     let
         isRequired_ =
             isRequired parentRequired name default
@@ -80,13 +81,26 @@ toNewDefinition parentRequired ( name, { type_, ref_, items, properties, require
                         Definition name isRequired_ <| Array_ <| toNewItems (toNewDefinition required) items
 
                     "object" ->
-                        Definition name isRequired_ <| Object_ <| toNewProperties (toNewDefinition required) properties
+                        distinguishObjectMap name isRequired_ required properties additionalPropertiesType
 
                     _ ->
                         Definition name isRequired_ <| Object_ <| toNewProperties (toNewDefinition required) properties
 
             _ ->
                 Definition name isRequired_ <| Object_ <| toNewProperties (toNewDefinition required) properties
+
+
+distinguishObjectMap : Name -> IsRequired -> List String -> Maybe Decode.Properties -> Maybe String -> Definition
+distinguishObjectMap name isRequired_ required properties additionalPropertiesType=
+    case additionalPropertiesType of
+        Nothing ->
+            Definition name isRequired_ <| Object_ <| toNewProperties (toNewDefinition required) properties
+        Just typeName->
+            case properties of
+                Just _ ->
+                    Definition name isRequired_ <| Object_ <| toNewProperties (toNewDefinition required) properties
+                Nothing ->
+                    Definition name isRequired_ <| Dict_ <| toNewDefinition required ("", (Decode.Definition (Just typeName) [] Nothing Nothing Nothing Nothing Nothing Nothing ))
 
 
 toNewProperties : Parser -> Maybe Decode.Properties -> Definitions
@@ -104,7 +118,7 @@ toNewItems : Parser -> Maybe Decode.Property -> Definition
 toNewItems toNewDefinition_ items =
     case items of
         Nothing ->
-            toNewDefinition_ ( "TODO WTF", Decode.Definition Nothing [] Nothing Nothing Nothing Nothing Nothing )
+            toNewDefinition_ ( "TODO WTF", Decode.Definition Nothing [] Nothing Nothing Nothing Nothing Nothing Nothing )
 
         Just items ->
             toNewDefinition_ <| extractProperty ( "TODO FIX", items )

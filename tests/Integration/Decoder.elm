@@ -3,7 +3,8 @@ module Integration.Decoder exposing (..)
 import Test exposing (..)
 import Expect exposing (Expectation, fail)
 import Json.Decode exposing (decodeString)
-import Decoder exposing (Article, decodeArticle, decodeErrorResponse, decodeGroup, decodeRules, EnumDisplaySize(EnumDisplaySizeLarge, EnumDisplaySizeSmall))
+import Decoder exposing (Article, decodeArticle, decodeErrorResponse, decodeGroup, decodeRules, decodeLabels, EnumDisplaySize(EnumDisplaySizeLarge, EnumDisplaySizeSmall))
+import Dict
 
 
 articleJson =
@@ -128,6 +129,24 @@ expectedRules =
     {}
 
 
+labelsJson =
+    """
+ {
+           "label1": "labelContent",
+           "label2": "labelContent",
+           "label3": "labelContent"
+       }
+     """
+
+
+expectedLabels =
+    Dict.fromList
+        [ ( "label1", "labelContent" )
+        , ( "label2", "labelContent" )
+        , ( "label3", "labelContent" )
+        ]
+
+
 all : Test
 all =
     describe "Decoder"
@@ -143,4 +162,7 @@ all =
         , test "should decode Rules" <|
             always <|
                 Expect.equal (Ok expectedRules) (decodeString decodeRules rulesJson)
+        , test "should decode labels" <|
+            always <|
+                Expect.equal (Ok expectedLabels) (decodeString decodeLabels labelsJson)
         ]
